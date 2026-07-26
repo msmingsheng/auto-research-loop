@@ -1,0 +1,106 @@
+[
+  {
+    "id": "seed_005",
+    "question": "How many distinct customers ordered a 'Gadgets' category product?",
+    "gold_sql": "SELECT COUNT(DISTINCT o.customer_id) FROM orders o JOIN products p ON o.product_id = p.product_id WHERE p.category = 'Gadgets';",
+    "validation": {
+      "sql_executed": true,
+      "row_count": 1,
+      "columns": [
+        "COUNT(DISTINCT o.customer_id)"
+      ],
+      "result_preview": [
+        [
+          5
+        ]
+      ],
+      "result": [
+        [
+          5
+        ]
+      ]
+    }
+  },
+  {
+    "id": "seed_001",
+    "question": "What is the total revenue by region?",
+    "gold_sql": "SELECT r.region_name, SUM(o.quantity * p.unit_price) AS revenue FROM orders o JOIN customers c ON o.customer_id = c.customer_id JOIN products p ON o.product_id = p.product_id JOIN regions r ON c.region_id = r.region_id GROUP BY r.region_name;",
+    "validation": {
+      "sql_executed": true,
+      "row_count": 3,
+      "columns": [
+        "region_name",
+        "revenue"
+      ],
+      "result_preview": [
+        [
+          "APAC",
+          439.88
+        ],
+        [
+          "EMEA",
+          574.76
+        ],
+        [
+          "North America",
+          549.65
+        ]
+      ],
+      "result": [
+        [
+          "APAC",
+          439.88
+        ],
+        [
+          "EMEA",
+          574.76
+        ],
+        [
+          "North America",
+          549.65
+        ]
+      ]
+    }
+  },
+  {
+    "id": "seed_006",
+    "question": "What is the average order quantity per region?",
+    "gold_sql": "SELECT r.region_name, AVG(o.quantity) AS avg_qty FROM orders o JOIN customers c ON o.customer_id = c.customer_id JOIN regions r ON c.region_id = r.region_id GROUP BY r.region_name;",
+    "validation": {
+      "sql_executed": true,
+      "row_count": 3,
+      "columns": [
+        "region_name",
+        "avg_qty"
+      ],
+      "result_preview": [
+        [
+          "APAC",
+          6.0
+        ],
+        [
+          "EMEA",
+          6.0
+        ],
+        [
+          "North America",
+          8.75
+        ]
+      ],
+      "result": [
+        [
+          "APAC",
+          6.0
+        ],
+        [
+          "EMEA",
+          6.0
+        ],
+        [
+          "North America",
+          8.75
+        ]
+      ]
+    }
+  }
+]

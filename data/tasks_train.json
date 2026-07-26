@@ -1,0 +1,106 @@
+[
+  {
+    "id": "seed_004",
+    "question": "What is the total revenue from orders placed in May 2026?",
+    "gold_sql": "SELECT SUM(o.quantity * p.unit_price) AS revenue FROM orders o JOIN products p ON o.product_id = p.product_id WHERE o.order_date >= '2026-05-01' AND o.order_date < '2026-06-01';",
+    "validation": {
+      "sql_executed": true,
+      "row_count": 1,
+      "columns": [
+        "revenue"
+      ],
+      "result_preview": [
+        [
+          549.6800000000001
+        ]
+      ],
+      "result": [
+        [
+          549.6800000000001
+        ]
+      ]
+    }
+  },
+  {
+    "id": "seed_002",
+    "question": "Which product had the highest total units sold?",
+    "gold_sql": "SELECT p.product_name, SUM(o.quantity) AS units FROM orders o JOIN products p ON o.product_id = p.product_id GROUP BY p.product_name ORDER BY units DESC LIMIT 1;",
+    "validation": {
+      "sql_executed": true,
+      "row_count": 1,
+      "columns": [
+        "product_name",
+        "units"
+      ],
+      "result_preview": [
+        [
+          "Widget A",
+          42
+        ]
+      ],
+      "result": [
+        [
+          "Widget A",
+          42
+        ]
+      ]
+    }
+  },
+  {
+    "id": "seed_003",
+    "question": "List each customer's total spend, highest first.",
+    "gold_sql": "SELECT c.customer_name, SUM(o.quantity * p.unit_price) AS spend FROM orders o JOIN customers c ON o.customer_id = c.customer_id JOIN products p ON o.product_id = p.product_id GROUP BY c.customer_name ORDER BY spend DESC;",
+    "validation": {
+      "sql_executed": true,
+      "row_count": 5,
+      "columns": [
+        "customer_name",
+        "spend"
+      ],
+      "result_preview": [
+        [
+          "Umbrella Ltd",
+          439.88
+        ],
+        [
+          "Soylent Inc",
+          419.82
+        ],
+        [
+          "Initech",
+          349.77
+        ],
+        [
+          "Acme Corp",
+          199.88
+        ],
+        [
+          "Globex",
+          154.94
+        ]
+      ],
+      "result": [
+        [
+          "Umbrella Ltd",
+          439.88
+        ],
+        [
+          "Soylent Inc",
+          419.82
+        ],
+        [
+          "Initech",
+          349.77
+        ],
+        [
+          "Acme Corp",
+          199.88
+        ],
+        [
+          "Globex",
+          154.94
+        ]
+      ]
+    }
+  }
+]

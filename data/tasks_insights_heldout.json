@@ -1,0 +1,12 @@
+[
+  {
+    "id": "insight_004",
+    "question": "What can we conclude from customer spend by region?",
+    "data": "NA: $2500, EMEA: $1800, APAC: $900"
+  },
+  {
+    "id": "insight_001",
+    "question": "What does the regional revenue data tell us?",
+    "data": "NA: $5000, EMEA: $3000, APAC: $2000"
+  }
+]

@@ -1,0 +1,3 @@
+direction
+"Look at {{customers.customer_name}}, identify their most recent transaction, and recommend how we could grow the business with this customer."
+"Analyze the product mix purchased by {{customers.customer_name}} and suggest a grounded cross-sell opportunity."

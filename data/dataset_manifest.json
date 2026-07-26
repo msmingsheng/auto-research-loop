@@ -1,0 +1,13 @@
+{
+  "created_at": "2026-07-26T03:15:07.705053+00:00",
+  "db_path": "E:\\github\\analytics_agent_evals_extended\\bootstrap\\..\\db\\analytics.db",
+  "db_sha256": "293314a3f7fcdd81c649524e94c73138b4e33a7a45a1b6dc67932c54efb493ea",
+  "direction_inputs": [],
+  "directions": [],
+  "values_per_direction": 3,
+  "generated_requested": 0,
+  "generated_accepted": 0,
+  "critic_enabled": false,
+  "split_seed": 42,
+  "train_fraction": 0.6
+}

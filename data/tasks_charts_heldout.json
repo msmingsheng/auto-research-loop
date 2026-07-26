@@ -1,0 +1,20 @@
+[
+  {
+    "id": "chart_005",
+    "question": "Show customer count by region.",
+    "data": "[{'region':'NA','customers':2},{'region':'EMEA','customers':2},{'region':'APAC','customers':1}]",
+    "data_shape": "categorical_comparison"
+  },
+  {
+    "id": "chart_001",
+    "question": "Show revenue trend over the last 6 months.",
+    "data": "[{'month':'Jan','revenue':1000},{'month':'Feb','revenue':1200},{'month':'Mar','revenue':1100}]",
+    "data_shape": "time_series"
+  },
+  {
+    "id": "chart_006",
+    "question": "Show the breakdown of orders by product category as a share of total.",
+    "data": "[{'category':'Widgets','pct':70},{'category':'Gadgets','pct':30}]",
+    "data_shape": "part_of_whole"
+  }
+]

@@ -1,0 +1,12 @@
+[
+  {
+    "id": "insight_003",
+    "question": "What does the product category breakdown tell us?",
+    "data": "Widgets: 60%, Gadgets: 40%"
+  },
+  {
+    "id": "insight_002",
+    "question": "What does the monthly revenue trend show?",
+    "data": "Jan: $1000, Feb: $1200, Mar: $1100, Apr: $1400"
+  }
+]
