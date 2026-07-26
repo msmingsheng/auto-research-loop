@@ -45,6 +45,69 @@ Agent prompt -> agent response -> skill grader
 The agent under evaluation and the optimizer/judge are separate components. The
 optimizer never replaces the agent during scoring.
 
+## Why the training loop does not use the TextGrad package yet
+
+The current loop uses a small local implementation of the TextGrad pattern in
+`optimize/text_optimizer.py`, named `TGDLite`. It treats each system prompt as a
+trainable text variable, converts grader failures into textual feedback, and asks
+the optimizer model to rewrite the prompt. This is prompt optimization, not model
+weight training.
+
+The local implementation was chosen initially because it:
+
+- Keeps the offline mock workflow runnable without another framework dependency.
+- Works with the repository's existing `engine.generate(prompt, system)` adapter.
+- Accepts heterogeneous feedback from SQL execution, deterministic chart rules,
+  and an LLM insight judge through one common grader result shape.
+- Makes the heldout keep/discard policy explicit and easy to audit.
+- Keeps provider selection and agent-under-test execution separate from prompt
+  optimization.
+
+This is not a claim that the local optimizer is better than TextGrad. It is a
+minimal compatibility layer that made the evaluation pipeline easy to bootstrap.
+Using the actual TextGrad package is the intended next step once the current
+baseline and integration tests are stable.
+
+## Plan to adopt TextGrad
+
+1. **Freeze the current baseline.** Record per-skill train and heldout scores,
+   retained prompts, trial logs, provider/model settings, dataset manifest, and
+   database hash. This gives the migration a reproducible comparison point.
+2. **Add TextGrad as an optional backend.** Add the package to the installation
+   configuration and introduce an optimizer-backend setting such as
+   `PROMPT_OPTIMIZER=tgdlite|textgrad`. Keep `TGDLite` available for offline tests
+   and as a fallback during the migration.
+3. **Build an engine bridge.** Adapt the existing optimizer engine to the model
+   interface expected by TextGrad. The agent under test must continue to run
+   through `ObjectAgentAdapter` or `EndpointAgentAdapter`; TextGrad should optimize
+   its prompt, not replace the agent during evaluation.
+4. **Represent prompts as TextGrad variables.** Replace `PromptVariable` and the
+   manual `TGDLite.step()` call with a TextGrad variable and optimizer while
+   retaining one independently optimized variable for each skill.
+5. **Wrap grader feedback as textual losses.** Convert the existing failure
+   explanations into loss/evaluation text:
+   SQL execution errors and result differences for `text2sql`, allowed-chart
+   violations for `chart_selection`, and groundedness/relevance verdicts for
+   `insight_generation`. Do not expose gold SQL or hidden chart labels directly
+   to the agent response path.
+6. **Preserve validation outside TextGrad.** After every proposed prompt update,
+   score the frozen heldout suite with the repository's existing graders. Retain
+   the candidate only when it improves the heldout score. TextGrad supplies the
+   update; this repository remains responsible for model selection and leakage
+   control.
+7. **Add parity and regression tests.** Run both backends with deterministic mock
+   engines and verify task routing, prompt isolation, logging, rejection of worse
+   candidates, and restoration of the best prompt. Add a smoke test for a real
+   provider behind an opt-in environment flag.
+8. **Compare before changing the default.** Compare pass-rate improvement, model
+   calls, latency, cost, prompt stability, and reproducibility across all three
+   skills. Make TextGrad the default only if it improves the workflow without
+   weakening heldout selection or offline testability.
+
+The migration is complete when both backends use the same datasets and graders,
+TextGrad-generated candidates still pass through the heldout gate, offline tests
+remain credential-free, and trial logs identify the optimizer backend and model.
+
 ## Installation
 
 ```bash
